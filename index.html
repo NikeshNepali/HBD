@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Birthday Surprise</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+/* All your previous CSS stays the same */
+*{box-sizing:border-box;}
+#birthday h1{
+  font-size:clamp(28px,6vw,55px);
+  font-weight:600;
+  text-align:center;
+  animation: colorCycle 3s linear infinite, glow 2s infinite alternate;
+}
+@keyframes colorCycle{
+  0% { color: #ff4d6d; }
+  20% { color: #ffb347; }
+  40% { color: white; }
+  60% { color: #4dd2ff; }
+  80% { color: #8e44ad; }
+  100% { color: #ff4d6d; }
+}
+body{
+  margin:0;
+  font-family:'Poppins',sans-serif;
+  min-height:100vh;
+  overflow:hidden;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:linear-gradient(135deg,#ff9a9e,#fad0c4,#fbc2eb);
+  padding:10px;
+}
+.balloon{
+  position:absolute;
+  bottom:-100px;
+  width:40px;
+  height:55px;
+  border-radius:50%;
+  animation:floatUp 12s linear infinite;
+  opacity:0.7;
+}
+@keyframes floatUp{
+  0%{transform:translateY(0);}
+  100%{transform:translateY(-120vh);}
+}
+.card{
+  background:rgba(255,255,255,0.25);
+  backdrop-filter:blur(12px);
+  padding:45px;
+  border-radius:20px;
+  text-align:center;
+  box-shadow:0 20px 50px rgba(0,0,0,0.25);
+  width:90%;
+  max-width:320px;
+}
+input{
+  display:block;
+  margin:14px auto;
+  padding:12px;
+  width:90%;
+  max-width:230px;
+  border-radius:8px;
+  border:none;
+  outline:none;
+  font-size:14px;
+  box-shadow:0 3px 10px rgba(0,0,0,0.1);
+}
+button{
+  margin-top:10px;
+  padding:12px 28px;
+  border:none;
+  border-radius:30px;
+  background:#ff4d6d;
+  color:white;
+  font-size:15px;
+  font-weight:500;
+  cursor:pointer;
+  transition:all .3s ease;
+  box-shadow:0 5px 15px rgba(0,0,0,0.2);
+}
+button:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 20px rgba(0,0,0,0.25);
+}
+#birthday{
+  display:none;
+  position:absolute;
+  top:40px;
+  text-align:center;
+}
+
+.image{
+  width:clamp(80px,18vw,130px);
+  height:clamp(80px,18vw,130px);
+  object-fit:cover;
+  border-radius:16px;
+  position:absolute;
+  top:-200px;
+  animation:fall linear infinite;
+  z-index:20;
+  box-shadow:0 10px 20px rgba(0,0,0,0.35);
+}
+
+@keyframes fall{
+  0%{transform:translateY(-200px) rotate(0deg);}
+  100%{transform:translateY(120vh) rotate(360deg);}
+}
+.messageBox{
+  position:absolute;
+  top:-200px;
+  left:50%;
+  transform:translateX(-50%);
+  background:white;
+  padding:18px 28px;
+  border-radius:14px;
+  font-size:clamp(13px,2.5vw,17px);
+  text-align:center;
+  box-shadow:0 15px 35px rgba(0,0,0,0.25);
+  animation:fallMessage 7s linear infinite;
+  z-index:50;
+  max-width:85%;
+}
+@keyframes fallMessage{
+  0%{transform:translate(-50%,-200px);}
+  100%{transform:translate(-50%,120vh);}
+}
+.ratThief {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  right: -200px;
+  bottom: 20px;
+  z-index: 30;
+  animation: ratRunPause linear forwards;
+}
+@keyframes ratRunPause {
+  0% { right: -200px; }
+  40% { right: 50vw; }
+  60% { right: 50vw; }
+  100% { right: 110vw; }
+}
+.ratThief img{
+   width:clamp(40px,10vw,80px);
+  transform:scaleX(-1);
+}
+.ratMessage{
+  background:white;
+  padding:12px 20px;
+  border-radius:12px;
+  font-size:15px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.2);
+}
+#thankYouBtn{
+  display:none;
+  position:absolute;
+  bottom:40px;
+  left:50%;
+  transform:translateX(-10px);
+  padding:12px 28px;
+  font-size:16px;
+  background:#4dd2ff;
+  color:white;
+  border:none;
+  border-radius:20px;
+  cursor:pointer;
+  z-index:100;
+}
+#thankYouBtn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 20px rgba(0,0,0,0.25);
+}
+#finalSection{
+  display:none; /* hidden initially */
+  position:fixed;  /* fixed so it stays in the middle */
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  z-index:200;
+}
+
+.finalCard.show {
+  opacity:1;        /* fade-in when class added */
+}
+.finalCard {
+  background: rgba(255,255,255,0.25);
+  backdrop-filter: blur(12px);
+  padding: 30px 25px;
+  border-radius: 25px;
+  text-align: center;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+  display: inline-block;
+  max-width: 400px;
+}
+
+.finalCard img {
+  width: clamp(120px,40vw,200px);
+  height: clamp(120px,40vw,200px);
+  border-radius: 16px;
+  margin-bottom: 20px;
+  object-fit: cover;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+.finalCard h1 {
+  font-size: 30px;
+  color: #ff4d6d;
+  margin-bottom: 10px;
+}
+
+#finalSection {
+  display: none; /* initially hidden */
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 200;
+  text-align: center;
+}
+
+/* Cake styling */
+.cake {
+  position: relative;
+  width: 150px;
+  margin: 20px auto 0;
+}
+
+/* Cake base */
+.cakeBase {
+  width: 150px;
+  height: 100px;
+  background: #ff6b6b;
+  border-radius: 0 0 15px 15px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Candle */
+.candle {
+  position: absolute;
+  top: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 10px;
+  height: 50px;
+  background: #fff176;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+/* Flame */
+.flame {
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 12px;
+  height: 20px;
+  background: radial-gradient(circle, #ffeb3b, #ff9800);
+  border-radius: 50%;
+  animation: flicker 0.2s infinite alternate;
+}
+
+/* Flame animation */
+@keyframes flicker {
+  0% { transform: translateX(-50%) rotate(0deg) scale(1); opacity:1; }
+  50% { transform: translateX(-50%) rotate(10deg) scale(1.1); opacity:0.8; }
+  100% { transform: translateX(-50%) rotate(-10deg) scale(1); opacity:1; }
+}
+
+/* Blown-out candle */
+.candle.out .flame {
+  display: none;
+}
+
+/* Surprise image styling */
+#surpriseImageContainer img {
+  width: 200px;
+  height: 200px;
+  border-radius: 16px;
+  margin-bottom: 20px;
+  object-fit: cover;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+#surpriseImageContainer button {
+  padding: 12px 25px;
+  background: #4dd2ff;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+#surpriseImageContainer button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+}
+
+@media (max-width:600px){
+
+#birthday{
+  top:20px;
+}
+
+.card{
+  padding:30px 20px;
+}
+
+button{
+  padding:10px 20px;
+  font-size:14px;
+}
+
+#thankYouBtn{
+  width:90%;
+  font-size:14px;
+}
+
+.finalCard{
+  padding:20px;
+}
+
+}
+
+</style>
+</head>
+<body>
+
+<div class="card" id="loginBox">
+  <h2>🎂 Birthday Surprise 🎂</h2>
+  <input type="text" id="username" placeholder="Username">
+  <input type="password" id="password" placeholder="Password">
+  <button onclick="login()">Malai Thich 🎁</button>
+  <p id="error" style="color:#d63031;font-size:13px"></p>
+</div>
+
+<div id="birthday">
+  <h1>🎉 Happy Birthday Aryaaaaaaa 🎉</h1>
+  <audio id="birthdayAudio" src="HBD.wav"></audio>
+  <div style="margin-top:18px">
+    <button onclick="startMessages()">Ya thich ta</button>
+  </div>
+</div>
+
+<button id="thankYouBtn" onclick="showThankYou()">
+    Huhuhu padhna garo bhaye tyo ako message lai pakaderw side lag ani rok kkk.
+    Ani
+    Thank You bhan ya thicherw sab padisakerw ani..... 
+    🙏</button>
+
+<!-- Final Section Card -->
+<!-- Final Section Card -->
+<div id="finalSection">
+  <div class="finalCard">
+    <!-- Cake appears first -->
+    <div id="cakeContainer" style="display:block;">
+      <h1>🎉 Candle Nibhauna Candle thichhhh 🎉</h1>
+      <div class="cake">
+        <div class="candle" onclick="blowCandle(this)">
+          <div class="flame"></div>
+        </div>
+        <div class="cakeBase"></div>
+        <audio id="clapAudio" src="clap.mp3"></audio>
+      </div>
+    </div>
+
+    <!-- Surprise image appears after cake interaction -->
+    <div id="surpriseImageContainer" style="display:none;">
+      <img src="Prof.png" alt="Surprise Image">
+      <p class="finalMessage">
+        Wishing you have a wondeful year and a lots of happiness, smiles, and unforgettable moments in Your life. 
+        Always keep this charm that you have from the childhood! Ahh personality ohoo sadhai yei naie hunxa thaa xaa tei ni reminder yei rakhh.🥳
+      </p>
+      <button onclick="sayThankYou()">🙏Happy Birthday chorr Malai Thank You bhanna ya thichhh🙏</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// Balloons
+for(let i=0;i<12;i++){
+  let balloon=document.createElement("div");
+  balloon.className="balloon";
+  balloon.style.left=Math.random()*100+"vw";
+  balloon.style.backgroundColor="hsl("+Math.random()*360+",70%,60%)";
+  balloon.style.animationDuration=(Math.random()*6+8)+"s";
+  document.body.appendChild(balloon);
+}
+
+// Login
+const correctUser="musi";
+const correctPass="didi";
+
+// Interval trackers
+let imageIntervals = [];
+let messageIntervals = [];
+let ratIntervals = [];
+let messagesRunning = false;
+
+function login(){
+  let user=document.getElementById("username").value;
+  let pass=document.getElementById("password").value;
+  if(user===correctUser && pass===correctPass){
+    document.getElementById("loginBox").style.display="none";
+    document.getElementById("birthday").style.display="block";
+  }else{
+    document.getElementById("error").innerText="Wrong username or password";
+  }
+}
+
+// Falling images
+function startFallingImages(){
+  const images = ["Img1.png","Img2.png","Img3.png","Img4.png","Img5.png","Img6.png","Img7.png","Img8.png","Img9.png","Img10.png"];
+  const maxVisible = 4;
+  const fallingImages = [];
+
+  let interval = setInterval(()=>{
+    if(fallingImages.length<maxVisible){
+      let img=document.createElement("img");
+      img.src=images[Math.floor(Math.random()*images.length)];
+      img.className="image";
+      img.style.left=Math.random()*95+"vw";
+      img.style.animationDuration=(Math.random()*5+6)+"s";
+      document.body.appendChild(img);
+      fallingImages.push(img);
+      setTimeout(()=>{if(document.body.contains(img)) document.body.removeChild(img); fallingImages.splice(fallingImages.indexOf(img),1);},12000);
+    }
+  },400);
+  imageIntervals.push(interval);
+}
+
+// Falling messages
+function startMessages(){
+    audio=document.getElementById("birthdayAudio");
+    audio.loop=true;
+    audio.play();
+  startFallingImages();
+  startRats();
+  if(messagesRunning){ 
+    alert("Pakh na ae pakh bistaraii message auna de kkk 🎉"); 
+    return;
+  }
+  messagesRunning = true;
+
+  const messages=[
+    "Ta Ekdam Ramro Sathi hosss yrrr wowww🎈",
+    "Aba bday paxi ya aile jaile here ni din ramro hoss 🎉",
+    "Sapana chai sakar hunaii parne hunxa hai terooo ✨",
+    "Haha Yestaii bhoot jastai hasilo khusilo hunuuu 😊",
+    "Gift naie yeii ho hai talaii la aba malai paisa patha taaa🎁",
+    "La hai yo barsa chai khusi le basna payessss... ",
+    "keep Growing keep Shinning... Happy Birthdayyy 🎂",
+    "Oho Heroineeeeee ka ko chai aba afai soch... 🎉"
+  ];
+
+  let msgInterval = setInterval(()=>{
+    let box = document.createElement("div");
+    box.className = "messageBox";
+    box.innerText = messages[Math.floor(Math.random()*messages.length)];
+    document.body.appendChild(box);
+
+    // Make message draggable
+    let isDragging = false;
+    let offsetX = 0;
+    let offsetY = 0;
+
+    box.addEventListener('mousedown', function(e){
+      isDragging = true;
+      offsetX = e.clientX - box.getBoundingClientRect().left;
+      offsetY = e.clientY - box.getBoundingClientRect().top;
+      box.style.animation = 'none'; // stop falling while dragging
+      box.style.zIndex = 1000; // bring to front
+    });
+
+    document.addEventListener('mousemove', function(e){
+      if(isDragging){
+        box.style.left = (e.clientX - offsetX) + 'px';
+        box.style.top = (e.clientY - offsetY) + 'px';
+      }
+    });
+
+    document.addEventListener('mouseup', function(){
+      if(isDragging){
+        isDragging = false;
+        box.style.animation = 'fallMessage 7s linear infinite'; // resume falling
+      }
+    });
+
+    // Remove after 9s
+    setTimeout(()=>{if(document.body.contains(box)) box.remove()},9000);
+  },2500);
+  messageIntervals.push(msgInterval);
+
+  // Show thank you button after 30 seconds
+  setTimeout(()=>{document.getElementById("thankYouBtn").style.display="block";},30000);
+}
+
+// Rats
+function startRats(){
+  const messages=["Haha Ma chai Musaaa 🎈","Janmadin Ko savakamana bhanna ako 🎉","Ma chai tero sapana pura na hos vanxu haiiii feriiii ✨",
+                  "Ke Lekhne Tha bhayenaaaa 😊","Gift chai j dekhiraxas tei hoo aba chocolate dee🎁","Feri talai hippie born day.. "];
+  let ratInterval = setInterval(()=>{
+    let thief=document.createElement("div");
+    thief.className="ratThief";
+
+    let rat=document.createElement("img");
+    rat.src="rat.png";
+
+    let msg=document.createElement("div");
+    msg.className="ratMessage";
+    msg.innerText=messages[Math.floor(Math.random()*messages.length)];
+
+    thief.appendChild(msg);
+    thief.appendChild(rat);
+    thief.style.bottom=Math.random()*60+"px";
+    thief.style.animationDuration=(Math.random()*7+6)+"s";
+
+    document.body.appendChild(thief);
+    setTimeout(()=>{if(document.body.contains(thief)) thief.remove()},36000);
+  },10000);
+  ratIntervals.push(ratInterval);
+}
+
+// Show final section
+function showThankYou(){
+  imageIntervals.forEach(i=>clearInterval(i));
+  messageIntervals.forEach(i=>clearInterval(i));
+  ratIntervals.forEach(i=>clearInterval(i));
+  document.querySelectorAll(".image,.messageBox,.ratThief").forEach(e=>e.remove());
+  document.getElementById("thankYouBtn").style.display="none";
+  document.getElementById("finalSection").style.display="block";
+  const btn = document.querySelector('.myButtonClass');
+if(btn) {
+    btn.remove();
+}
+}
+
+// Blow candle and show surprise image
+function blowCandle(candle){
+  candle.classList.add('out');
+  // After a short delay, hide cake and show surprise image
+ // Show cake → surprise image after 1 second
+  setTimeout(()=>{
+    document.getElementById('cakeContainer').style.display = 'none';
+    document.getElementById('surpriseImageContainer').style.display = 'block';
+  }, 6000);
+
+  // Play audio
+  const audio = document.getElementById('clapAudio');
+  audio.currentTime = 0; // start from beginning
+  audio.volume = 1;       // full volume
+  audio.play().catch(err => console.log("Audio autoplay blocked:", err));
+
+  // After 4 seconds, fade out over 1 second
+  setTimeout(()=>{
+    const fadeDuration = 1000; // 1 second
+    const fadeSteps = 20;      // number of steps
+    const fadeStepTime = fadeDuration / fadeSteps;
+    let step = 0;
+
+    const fadeInterval = setInterval(()=>{
+      step++;
+      audio.volume = Math.max(1 - step / fadeSteps, 0); // gradually decrease volume
+      if(step >= fadeSteps){
+        clearInterval(fadeInterval);
+        audio.pause();
+        audio.currentTime = 0; // reset for next time
+      }
+    }, fadeStepTime);
+  }, 4000); // start fading afterading after 4 seconds
+}
+
+// Return to login page
+function sayThankYou(){
+  alert("Feri herni bhaye suru bata refreshhh gar pagalll..");
+  // Stop birthday music
+  const audio = document.getElementById('birthdayAudio');
+  audio.volume = 1;       // full volume
+  audio.play().catch(err => console.log("Audio autoplay blocked:", err));
+
+  // After 4 seconds, fade out over 1 second
+  setTimeout(()=>{
+    const fadeDuration = 1000; // 1 second
+    const fadeSteps = 20;      // number of steps
+    const fadeStepTime = fadeDuration / fadeSteps;
+    let step = 0;
+
+    const fadeInterval = setInterval(()=>{
+      step++;
+      audio.volume = Math.max(1 - step / fadeSteps, 0); // gradually decrease volume
+      if(step >= fadeSteps){
+        clearInterval(fadeInterval);
+        audio.pause();
+        audio.currentTime = 0; // reset for next time
+      }
+    }, fadeStepTime);
+  }, 4000); // start fading a
+}
+</script>
+</body>
+</html>
